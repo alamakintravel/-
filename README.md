@@ -1,1 +1,677 @@
-# -
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شركة الأماكن للسفر والسياحة - النظام المتكامل</title>
+    <!-- خط تجوال من خطوط جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #0b5ed7;
+            --accent-color: #ffc107;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --bg-color: #f4f7f6;
+            --text-color: #212529;
+            --card-bg: #ffffff;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* شريط التنقل العلوي بين الموقع واللوحة */
+        .system-nav {
+            background-color: #111827;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .system-nav .brand-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .system-nav .brand-mini img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-tab-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-tab-btn.active, .nav-tab-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        /* الحاويات الرئيسية للتبويبات */
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ================= واجهة موقع الحجز (Client Portal) ================= */
+        .client-container {
+            max-width: 850px;
+            margin: 30px auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .client-header {
+            text-align: center;
+            margin-bottom: 35px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .client-header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            border: 3px solid var(--primary-color);
+            background-color: #000; /* لتناسب الشعار ذو الخلفية السوداء إن وجد */
+        }
+
+        .client-header h1 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .client-header p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        input, select, textarea {
+            padding: 12px 15px;
+            border: 1.5px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+            background: #fff;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+        }
+
+        .btn-submit:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* ================= واجهة لوحة التحكم (Dashboard) ================= */
+        .admin-dashboard {
+            max-width: 1300px;
+            margin: 20px auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-info h3 {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .stat-info .number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .stat-icon.blue { background: #e0f2fe; color: #0284c7; }
+        .stat-icon.green { background: #dcfce7; color: #16a34a; }
+        .stat-icon.yellow { background: #fef9c3; color: #ca8a04; }
+        .stat-icon.red { background: #fee2e2; color: #dc2626; }
+
+        .dashboard-content {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .dashboard-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .dashboard-header-flex h2 {
+            font-size: 1.4rem;
+            color: #111827;
+        }
+
+        .search-filter-box {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-filter-box input, .search-filter-box select {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+        }
+
+        /* الجدول */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: #f9fafb;
+            color: #374151;
+            font-weight: 700;
+        }
+
+        tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge.pending { background: #fef3c7; color: #92400e; }
+        .badge.confirmed { background: #d1fae5; color: #065f46; }
+        .badge.cancelled { background: #fee2e2; color: #991b1b; }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-action {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-wa { background: #25d366; color: white; }
+        .btn-wa:hover { background: #1ebd58; }
+
+        .btn-status { background: #e5e7eb; color: #374151; }
+        .btn-status:hover { background: #d1d5db; }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            .client-container {
+                padding: 20px;
+                margin: 15px;
+            }
+            .system-nav {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شريط التنقل العلوي بين واجهة الموقع ولوحة التحكم -->
+    <div class="system-nav">
+        <div class="brand-mini">
+            <!-- الشعار الجديد مصغر في الشريط العلوي -->
+            <img src="Untitled-3 (5).jpg" alt="شعار الأماكن">
+            <span>نظام الأماكن الإداري</span>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab-btn active" onclick="switchTab('client')"><i class="fa-solid fa-globe"></i> واجهة موقع الحجز</button>
+            <button class="nav-tab-btn" onclick="switchTab('admin')"><i class="fa-solid fa-chart-line"></i> لوحة التحكم (Dashboard)</button>
+        </div>
+    </div>
+
+    <!-- ================= 1. تبويب موقع الحجز (Client View) ================= -->
+    <div id="clientTab" class="tab-content active">
+        <div class="client-container">
+            <div class="client-header">
+                <!-- الشعار الجديد بحجم كبير وبارز في واجهة الحجز -->
+                <img src="Untitled-3 (5).jpg" alt="شركة الأماكن للسفر والسياحة">
+                <h1>شركة الأماكن للسفر والسياحة</h1>
+                <p>وجهتك الأولى لاكتشاف العالم بأعلى درجات الراحة والرفاهية</p>
+            </div>
+
+            <form id="bookingForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="serviceType">نوع الخدمة المطلوبة *</label>
+                        <select id="serviceType" required>
+                            <option value="">اختر الخدمة...</option>
+                            <option value="برنامج سياحي متكامل">برنامج سياحي متكامل</option>
+                            <option value="حجز تذاكر طيران">حجز تذاكر طيران</option>
+                            <option value="حجز فنادق ومنتجعات">حجز فنادق ومنتجعات</option>
+                            <option value="استخراج تأشيرة دخول (فيزا)">استخراج تأشيرة دخول (فيزا)</option>
+                            <option value="استقبال وتوصيل مطار">استقبال وتوصيل مطار</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="destination">الوجهة (البلد / المدينة) *</label>
+                        <input type="text" id="destination" placeholder="مثال: تركيا، دبي، ماليزيا..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="departureDate">تاريخ المغادرة المتوقع *</label>
+                        <input type="date" id="departureDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="returnDate">تاريخ العودة المتوقع</label>
+                        <input type="date" id="returnDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adultsCount">عدد البالغين (+12 سنة) *</label>
+                        <input type="number" id="adultsCount" min="1" value="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="childrenCount">عدد الأطفال (أقل من 12 سنة)</label>
+                        <input type="number" id="childrenCount" min="0" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fullName">الاسم الكامل *</label>
+                        <input type="text" id="fullName" placeholder="أدخل اسمك الكريم" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">رقم الهاتف / الواتساب *</label>
+                        <input type="tel" id="phone" placeholder="07xxxxxxxx" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="notes">ملاحظات أو طلبات خاصة</label>
+                        <textarea id="notes" rows="4" placeholder="اكتب تفاصيل درجة الطيران المفضلة، تصنيف الفندق، أو أي طلبات خاصة..."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit"><i class="fa-brands fa-whatsapp"></i> تأكيد وإرسال طلب الحجز</button>
+            </form>
+
+            <div class="footer-note">
+                جميع الحقوق محفوظة © شركة الأماكن للسفر والسياحة 2026
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 2. تبويب لوحة التحكم (Admin Dashboard) ================= -->
+    <div id="adminTab" class="tab-content">
+        <div class="admin-dashboard">
+            
+            <!-- إحصائيات سريعة -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>إجمالي الححوزات</h3>
+                        <div class="number" id="statTotal">0</div>
+                    </div>
+                    <div class="stat-icon blue"><i class="fa-solid fa-plane-departure"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>حجوزات مؤكدة</h3>
+                        <div class="number" id="statConfirmed">0</div>
+                    </div>
+                    <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>قيد المعالجة</h3>
+                        <div class="number" id="statPending">0</div>
+                    </div>
+                    <div class="stat-icon yellow"><i class="fa-solid fa-clock"></i></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>حجوزات ملغاة</h3>
+                        <div class="number" id="statCancelled">0</div>
+                    </div>
+                    <div class="stat-icon red"><i class="fa-solid fa-circle-xmark"></i></div>
+                </div>
+            </div>
+
+            <!-- جدول إدارة الحجوزات -->
+            <div class="dashboard-content">
+                <div class="dashboard-header-flex">
+                    <h2><i class="fa-solid fa-list-check"></i> قائمة الحجوزات الواردة</h2>
+                    <div class="search-filter-box">
+                        <input type="text" id="searchInput" placeholder="بحث بالاسم أو الوجهة..." onkeyup="filterBookings()">
+                        <select id="statusFilter" onchange="filterBookings()">
+                            <option value="">جميع الحالات</option>
+                            <option value="قيد المعالجة">قيد المعالجة</option>
+                            <option value="مؤكد">مؤكد</option>
+                            <option value="ملغي">ملغي</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>اسم العميل</th>
+                                <th>الهاتف</th>
+                                <th>الخدمة</th>
+                                <th>الوجهة</th>
+                                <th>تاريخ السفر</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsTableBody">
+                            <!-- سيتم تعبئة البيانات برمجياً -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="footer-note">
+                لوحة تحكم نظام الأماكن للسفر والسياحة - إدارة حية
+            </div>
+        </div>
+    </div>
+
+    <!-- جافا سكريبت للنظام وتخزين الحجوزات المحلية -->
+    <script>
+        // رقم واتساب الشركة لاستقبال الحجوزات
+        const companyWhatsAppNumber = "9647000000000";
+
+        // قاعدة بيانات تجريبية أولية أو من الذاكرة المحلية (LocalStorage)
+        let bookings = JSON.parse(localStorage.getItem('alamaken_bookings')) || [
+            { id: 1, name: "أحمد محمد العبيدي", phone: "07712345678", service: "برنامج سياحي متكامل", destination: "طرابزون، تركيا", date: "2026-06-15", status: "مؤكد" },
+            { id: 2, name: "سارة خالد الشمري", phone: "07898765432", service: "حجز فنادق ومنتجعات", destination: "دبي، الإمارات", date: "2026-07-01", status: "قيد المعالجة" }
+        ];
+
+        // التبديل بين التبويبات
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-tab-btn').forEach(el => el.classList.remove('active'));
+
+            if(tabName === 'client') {
+                document.getElementById('clientTab').classList.add('active');
+                event.currentTarget.classList.add('active');
+            } else {
+                document.getElementById('adminTab').classList.add('active');
+                event.currentTarget.classList.add('active');
+                renderAdminDashboard();
+            }
+        }
+
+        // إرسال الحجز من الموقع وتخزينه في لوحة التحكم وتوجيهه للواتساب
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const service = document.getElementById('serviceType').value;
+            const destination = document.getElementById('destination').value;
+            const depDate = document.getElementById('departureDate').value;
+            const retDate = document.getElementById('returnDate').value || "غير محدد";
+            const adults = document.getElementById('adultsCount').value;
+            const children = document.getElementById('childrenCount').value;
+            const name = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const notes = document.getElementById('notes').value || "لا يوجد";
+
+            // إضافة الحجز الجديد إلى مصفوفة البيانات لوحة التحكم
+            const newBooking = {
+                id: Date.now(),
+                name: name,
+                phone: phone,
+                service: service,
+                destination: destination,
+                date: depDate,
+                status: "قيد المعالجة"
+            };
+
+            bookings.unshift(newBooking);
+            localStorage.setItem('alamaken_bookings', JSON.stringify(bookings));
+
+            // صياغة رسالة الواتساب
+            const message = `*طلب حجز جديد - شركة الأماكن للسفر والسياحة*%0A%0A` +
+                `*الاسم:* ${name}%0A` +
+                `*رقم الهاتف:* ${phone}%0A` +
+                `*الخدمة المطلوبة:* ${service}%0A` +
+                `*الوجهة:* ${destination}%0A` +
+                `*تاريخ المغادرة:* ${depDate}%0A` +
+                `*تاريخ العودة:* ${retDate}%0A` +
+                `*عدد البالغين:* ${adults}%0A` +
+                `*عدد الأطفال:* ${children}%0A` +
+                `*ملاحظات إضافية:* ${notes}`;
+
+            // فتح الواتساب
+            const whatsappURL = `https://wa.me/${companyWhatsAppNumber}?text=${message}`;
+            window.open(whatsappURL, '_blank');
+
+            alert("تم إرسال طلبك بنجاح وتسجيله في النظام! سيتم تحويلك الآن لمراسلة الشركة عبر الواتساب.");
+            this.reset();
+        });
+
+        // رسم وترتيب لوحة التحكم
+        function renderAdminDashboard(dataToRender = bookings) {
+            const tbody = document.getElementById('bookingsTableBody');
+            tbody.innerHTML = "";
+
+            // حساب الإحصائيات
+            document.getElementById('statTotal').innerText = bookings.length;
+            document.getElementById('statConfirmed').innerText = bookings.filter(b => b.status === 'مؤكد').length;
+            document.getElementById('statPending').innerText = bookings.filter(b => b.status === 'قيد المعالجة').length;
+            document.getElementById('statCancelled').innerText = bookings.filter(b => b.status === 'ملغي').length;
+
+            if(dataToRender.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #888;">لا توجد ححوزات مطابقة حالياً</td></tr>`;
+                return;
+            }
+
+            dataToRender.forEach((b, index) => {
+                let badgeClass = 'pending';
+                if(b.status === 'مؤكد') badgeClass = 'confirmed';
+                if(b.status === 'ملغي') badgeClass = 'cancelled';
+
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong>${b.name}</strong></td>
+                    <td>${b.phone}</td>
+                    <td>${b.service}</td>
+                    <td>${b.destination}</td>
+                    <td>${b.date}</td>
+                    <td><span class="badge ${badgeClass}">${b.status}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-action btn-status" onclick="toggleStatus(${b.id})" title="تغيير الحالة"><i class="fa-solid fa-rotate"></i></button>
+                            <a class="btn-action btn-wa" href="https://wa.me/${b.phone.replace(/[^0-9]/g, '')}?text=مرحباً%20بكم%20في%20شركة%20الأماكن%20للسفر%20والسياحة،%20بخصوص%20طلبكم%20إلى%20${b.destination}..." target="_blank" title="مراسلة عبر الواتساب"><i class="fa-brands fa-whatsapp"></i></a>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // تغيير حالة الحجز من لوحة التحكم
+        function toggleStatus(id) {
+            const booking = bookings.find(b => b.id === id);
+            if(!booking) return;
+
+            const statuses = ["قيد المعالجة", "مؤكد", "ملغي"];
+            let currentIndex = statuses.indexOf(booking.status);
+            let nextIndex = (currentIndex + 1) % statuses.length;
+            booking.status = statuses[nextIndex];
+
+            localStorage.setItem('alamaken_bookings', JSON.stringify(bookings));
+            filterBookings();
+        }
+
+        // فلترة وبحث الحجوزات
+        function filterBookings() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const statusVal = document.getElementById('statusFilter').value;
+
+            let filtered = bookings.filter(b => {
+                let matchesSearch = b.name.toLowerCase().includes(searchText) || b.destination.toLowerCase().includes(searchText);
+                let matchesStatus = statusVal === "" || b.status === statusVal;
+                return matchesSearch && matchesStatus;
+            });
+
+            renderAdminDashboard(filtered);
+        }
+    </script>
+</body>
+</html>

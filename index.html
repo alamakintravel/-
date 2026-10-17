@@ -366,8 +366,6 @@
     <!-- شريط التنقل العلوي -->
     <div class="system-nav">
         <div class="brand-mini">
-            <img width="5906" height="5906" alt="logo" src="https://github.com/user-attachments/assets/b4ed9a35-2e84-4fc8-b12c-e234cf01fef7" />
-
             <img src="logo.png" alt="شعار الأماكن">
             <span>شركة الأماكن للسفر والسياحة</span>
         </div>
@@ -501,21 +499,7 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>اسم العميل</th>
-                                <th>الهاتف</th>
-                                <th>الخدمة</th>
-                                <th>الوجهة</th>
-                                <th>تاريخ السفر</th>
-                                <th>الحالة</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bookingsTableBody">
+               
                             <!-- فارغ إبتدائياً -->
                         </tbody>
                     </table>
@@ -574,16 +558,7 @@
             bookings.unshift(newBooking);
             localStorage.setItem('alamaken_bookings', JSON.stringify(bookings));
 
-            const message = `*طلب حجز جديد - شركة الأماكن للسفر والسياحة*%0A%0A` +
-                `*الاسم:* ${name}%0A` +
-                `*رقم الهاتف:* ${phone}%0A` +
-                `*الخدمة المطلوبة:* ${service}%0A` +
-                `*الوجهة:* ${destination}%0A` +
-                `*تاريخ المغادرة:* ${depDate}%0A` +
-                `*تاريخ العودة:* ${retDate}%0A` +
-                `*عدد البالغين:* ${adults}%0A` +
-                `*عدد الأطفال:* ${children}%0A` +
-                `*ملاحظات إضافية:* ${notes}`;
+        
 
             const whatsappURL = `https://wa.me/${companyWhatsAppNumber}?text=${message}`;
             window.open(whatsappURL, '_blank');
